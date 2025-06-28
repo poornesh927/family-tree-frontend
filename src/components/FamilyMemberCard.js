@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddMemberModal from "./AddMemberModal";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function FamilyMemberCard({ member, familyName, depth }) {
   const [showChildren, setShowChildren] = useState(true);
@@ -10,32 +11,79 @@ function FamilyMemberCard({ member, familyName, depth }) {
   const closeModal = () => setShowModal(false);
 
   return (
-    <div style={{ marginLeft: depth * 30, border: "1px solid #ccc", padding: "10px", marginBottom: "10px", borderRadius: "8px" }}>
-      <h4>{member.name} ({member.relation})</h4>
-      <p><strong>DOB:</strong> {member.dob}</p>
-      {member.image && (
-        <img src={member.image} alt={member.name} style={{ width: "100px", borderRadius: "4px" }} />
-      )}
+    <div
+      className="card mb-3"
+      style={{ marginLeft: depth * 30, backgroundColor: "#f8f9fa" }}
+    >
+      <div className="card-body">
+        <h5 className="card-title">
+          {member.name} <small className="text-muted">({member.relation})</small>
+        </h5>
+        <p className="card-text">
+          <strong>DOB:</strong> {member.dob}
+        </p>
 
-      {/* View Docs */}
-      <div style={{ marginTop: "10px" }}>
-        {member.docs?.aadhar && (
-          <a href={member.docs.aadhar} target="_blank" rel="noreferrer">Aadhar 📄</a>
-        )}{" "}
-        {member.docs?.pan && (
-          <a href={member.docs.pan} target="_blank" rel="noreferrer">PAN 📄</a>
-        )}{" "}
-        {member.docs?.voter && (
-          <a href={member.docs.voter} target="_blank" rel="noreferrer">Voter 📄</a>
+        {member.image && (
+          <img
+            src={member.image}
+            alt={member.name}
+            className="img-thumbnail mb-3"
+            style={{ width: "120px" }}
+          />
         )}
-      </div>
 
-      {/* Actions */}
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={toggleChildren}>
-          {showChildren ? "🔽 Collapse" : "▶️ Expand"}
-        </button>{" "}
-        <button onClick={openModal}>➕ Add Child</button>
+        {/* View Documents */}
+        <div className="mb-3">
+          {member.docs?.aadhar && (
+            <a
+              href={member.docs.aadhar}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-sm btn-outline-primary me-2"
+              download
+            >
+              Aadhar 📄
+            </a>
+          )}
+          {member.docs?.pan && (
+            <a
+              href={member.docs.pan}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-sm btn-outline-success me-2"
+              download
+            >
+              PAN 📄
+            </a>
+          )}
+          {member.docs?.voter && (
+            <a
+              href={member.docs.voter}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-sm btn-outline-danger"
+              download
+            >
+              Voter 📄
+            </a>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div>
+          <button
+            onClick={toggleChildren}
+            className="btn btn-sm btn-warning me-2"
+          >
+            {showChildren ? "🔽 Collapse" : "▶️ Expand"}
+          </button>
+          <button
+            onClick={openModal}
+            className="btn btn-sm btn-primary"
+          >
+            ➕ Add Child
+          </button>
+        </div>
       </div>
 
       {/* Add Modal */}
@@ -48,9 +96,9 @@ function FamilyMemberCard({ member, familyName, depth }) {
         />
       )}
 
-      {/* Recursively render children */}
+      {/* Recursive Children */}
       {showChildren && member.children?.length > 0 && (
-        <div>
+        <div className="ms-4 mt-3">
           {member.children.map((child, idx) => (
             <FamilyMemberCard
               key={idx}

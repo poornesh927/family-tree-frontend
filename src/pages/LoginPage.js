@@ -11,16 +11,20 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, {
+        email,
+        password
+      });
+
       alert(res.data.msg);
 
-      // Save token in localStorage
+      // Save token and user info in localStorage
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
-      localStorage.setItem("family", res.data.family);
-       localStorage.setItem("role", res.data.role);
+      localStorage.setItem("role", res.data.user.role);
+      localStorage.setItem("family", res.data.user.family);
+      localStorage.setItem("name", res.data.user.name);
 
-      navigate("/dashboard"); // go to next page
+      navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }
@@ -30,8 +34,16 @@ function LoginPage() {
     <div className="auth-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button type="submit">Login</button>
       </form>
       <p>No account? <Link to="/signup">Signup here</Link></p>
